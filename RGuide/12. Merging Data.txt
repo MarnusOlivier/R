@@ -1,0 +1,32 @@
+=====================================================================================
+Merging data with and merge() using na.locf from library(xts) to fill NA values
+=====================================================================================
+Merges data frames
+Important parameters: x, y, by, by.x, by.y, all
+
+mergedData = merge(reviews, solutions, by.x = "solution_id", by.y = "id", all=TRUE)
+
+library(xts)
+mergedData  <- na.locf(mergedData  )
+
+===============================
+Using join in the plyr package
+===============================
+Faster, but less full featured
+
+library(plyr)
+
+df1 <- data.frame(id=sample(1:10),x=rnorm(10))
+df2 <- data.frame(id=sample(1:10),y=rnorm(10))
+
+join(df1,df2)
+arrange(join(df1,df2), id)
+
+works nicely with multiple data frames but you need to have a common id with the same name
+
+df1 <- data.frame(id=sample(1:10),x=rnorm(10))
+df2 <- data.frame(id=sample(1:10),y=rnorm(10))
+df3 <- data.frame(id=sample(1:10),z=rnorm(10))
+
+dfList <- list(df1,df2,df3)
+join_all(dfList)

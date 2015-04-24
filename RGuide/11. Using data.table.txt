@@ -1,0 +1,28 @@
+===========================================================
+All functions that accept data.frame work on data.table
+Written in C so it is much faster
+Much, much faster at subsetting, group, and updating
+===========================================================
+library(data.table)
+
+DF <- data.frame(x =rnorm(9), y=rep(c("a","b", "c"), each=3), z=rnorm(9))
+DT <- data.table(x =rnorm(9), y=rep(c("a","b", "c"), each=3), z=rnorm(9))
+
+tables(DT)
+DT[,list(mean(x),sum(z))]
+
+Adding new variable
+DT[,w:= z^2]
+
+Multiple operations
+DT[,m:={tmp<-(x+z); log2(tmp+5)}]
+
+plyr like operations
+DT[,a:=x>0]
+
+DT[,b:=mean(x+w), by=a]
+
+
+set.seed(123);
+DT <- data.table(x=sample(letters[1:3]))
+

@@ -1,0 +1,51 @@
+-------------------------------------------------------------------------
+Reading and writing Tabular Data
+-------------------------------------------------------------------------
+read.table, read.csv, write.table	tabular data
+readLines, writeLines			lines in a text file
+source, dump				R code files
+dget, dput				R code files
+load, save				saved workspaces
+unserialize, serialize			R objects in binary form
+
+-------------------------------------------------------------------------
+read.table, read.csv
+-------------------------------------------------------------------------
+file, 			the name of a file, or a connection
+header, 		logical indicating if the file has a header line
+sep, 			a string indicating how the columns are separated
+colClasses, 		a character vector indicating the class of each column in the dataset
+nrows, 			the number of rows in the dataset
+comment.char, 		a character string indicating the comment character
+skip, 			the number of lines to skip from the beginning
+stringsAsFactors, 	should character variables be coded as factors?
+
+data <- read.table("foo.txt")
+
+
+-------------------------------------------------------------------------
+Connections: Interfaces to the outside world
+-------------------------------------------------------------------------
+con <- file("foo.txt", "r")
+data <- read.csv(con)
+close(con)
+
+is the same as
+
+data <- read.csv("foo.txt") 	
+
+con <- gzfile("words.gz") or bzfile
+> x <- readLines(con, 10)
+> x
+ [1] "1080" "10-point" "10th" "11-point"
+ [5] "12-point" "16-point" "18-point" "1st"
+ [9] "2" "20-point"
+
+con <- url("http://www.jhsph.edu", "r")
+x <- readLines(con)
+> head(x)
+[1] "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">"
+[2] ""
+[3] "<html>"
+[4] "<head>"
+[5] "\t<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8

@@ -1,0 +1,34 @@
+====================
+Downloading files
+====================
+
+Getting and setting you working directory
+------------------------------------------
+setwd("../") moves you up one directory
+
+Checking for and creating directories
+---------------------------------------
+file.exist("directoryName")
+dir.create("directoryName")
+
+if (!file.exist("directoryName")){
+	dir.create("directoryName)
+}
+
+Getting data from the internet
+-------------------------------
+download.file()
+
+Dowloads files from the interenet
+Import parameters are the url, destfile, method
+Useful for downloaing tab-delimited, csv and othe files
+
+Example
+	fileUrl <- "https://data.bat............."
+	dowload.file(fileUrl, desfile = "./data/cameras.csv". method = "curl")
+	list.files("./data")
+dateDownloaded <- date()
+
+
+
+

@@ -1,0 +1,42 @@
+In general the best way to find out if the R package exists is to Google "data storage mechanism R package"
+
+------------------------------------
+Ineracting more directly with files
+------------------------------------
+file	- open a connection to a text file
+url	- open a connection to a url
+gzfile	- open a connection to a .gz file
+bzfile	- open a connection to a .bz2 file
+?connections for more information
+
+REMEMBER TO CLOSE CONNECTIONS!!!!!
+
+
+----------------
+foreign package
+----------------
+Basic function read.foo
+	- read.mtp (Minitab)
+	- read.octave (Octave)
+	- ...
+
+----------------
+Reading images
+----------------
+jpeg
+readbitmap
+png
+EBImage
+
+-----------------
+Reading GIS data
+-----------------
+rgal
+rgeos
+raster
+
+-------------------
+Reading music data
+-------------------
+tuneR
+seewave

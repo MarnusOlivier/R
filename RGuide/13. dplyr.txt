@@ -1,0 +1,155 @@
+==============================
+Manipulating Data with dplyr
+==============================
+The first argument is always a data frame
+The subsequent arguments describe what to do with it, and you can refer to columns in the data frame directly without using the $ operator
+The result is always a new data frame
+Data frames must be properly formatted and annotated for this to all be useful
+
+starting up
+==============
+library(dplyr)
+packageVersion("dplyr")
+cran <- tbl_df(mydf)			data frame tbl
+rm("mydf")				removes data_frame
+
+Selecting Columns
+===========================
+select(cran, r_arch:country)
+select(cran, -time)			Excludes time
+select(cran, -(X:size))			Excludes multiple columns
+
+Filtering Rows
+===================
+filter(cran, package == "swirl")
+filter(cran, r_version == '3.1.1', country == 'US') 	and filter can use & as well!!!!!!!!!
+filter(cran, r_version <= '3.0.2'| country == 'IN') 	or filter
+filter(cran, !is.na(r_version))
+
+Arranging/Sorting
+===================
+arrange(cran2, ip_id)
+arrange(cran2, desc(ip_id))
+arrange(cran2, country, desc(r_version), ip_id)
+
+Mutate/Crearing new variables
+==============================
+mutate(cran3, size_mb = size / 2^20)
+mutate(cran3, size_mb = size/2^20, size_gb = size_mb/2^10)
+mutate(cran3, correct_size = size + 1000)
+
+Summarizing
+============
+summarize(cran, avg_bytes = mean(size))
+
+Renaming
+==========
+rename(cran, current_name, new_name)
+
+==================================
+Grouping and Chaining with dplyr
+==================================
+summarize(), group_by()
+========================
+> cran <- tbl_df(mydf)
+> cran
+Source: local data frame [225,468 x 11]
+
+    X       date     time    size r_version r_arch      r_os      package version country ip_id
+1   1 2014-07-08 00:54:41   80589     3.1.0 x86_64   mingw32    htmltools   0.2.4      US     1
+2   2 2014-07-08 00:59:53  321767     3.1.0 x86_64   mingw32      tseries 0.10-32      US     2
+3   3 2014-07-08 00:47:13  748063     3.1.0 x86_64 linux-gnu        party  1.0-15      US     3
+4   4 2014-07-08 00:48:05  606104     3.1.0 x86_64 linux-gnu        Hmisc  3.14-4      US     3
+5   5 2014-07-08 00:46:50   79825     3.0.2 x86_64 linux-gnu       digest   0.6.4      CA     4
+6   6 2014-07-08 00:48:04   77681     3.1.0 x86_64 linux-gnu randomForest   4.6-7      US     3
+7   7 2014-07-08 00:48:35  393754     3.1.0 x86_64 linux-gnu         plyr   1.8.1      US     3
+8   8 2014-07-08 00:47:30   28216     3.0.2 x86_64 linux-gnu      whisker   0.3-2      US     5
+9   9 2014-07-08 00:54:58    5928        NA     NA        NA         Rcpp  0.10.4      CN     6
+10 10 2014-07-08 00:15:35 2206029     3.0.2 x86_64 linux-gnu     hflights     0.1      US     7
+.. ..        ...      ...     ...       ...    ...       ...          ...     ...     ...   ...
+
+> by_package <- group_by(cran, package)
+> by_package
+Source: local data frame [225,468 x 11]
+Groups: package
+
+    X       date     time    size r_version r_arch      r_os      package version country ip_id
+1   1 2014-07-08 00:54:41   80589     3.1.0 x86_64   mingw32    htmltools   0.2.4      US     1
+2   2 2014-07-08 00:59:53  321767     3.1.0 x86_64   mingw32      tseries 0.10-32      US     2
+3   3 2014-07-08 00:47:13  748063     3.1.0 x86_64 linux-gnu        party  1.0-15      US     3
+4   4 2014-07-08 00:48:05  606104     3.1.0 x86_64 linux-gnu        Hmisc  3.14-4      US     3
+5   5 2014-07-08 00:46:50   79825     3.0.2 x86_64 linux-gnu       digest   0.6.4      CA     4
+6   6 2014-07-08 00:48:04   77681     3.1.0 x86_64 linux-gnu randomForest   4.6-7      US     3
+7   7 2014-07-08 00:48:35  393754     3.1.0 x86_64 linux-gnu         plyr   1.8.1      US     3
+8   8 2014-07-08 00:47:30   28216     3.0.2 x86_64 linux-gnu      whisker   0.3-2      US     5
+9   9 2014-07-08 00:54:58    5928        NA     NA        NA         Rcpp  0.10.4      CN     6
+10 10 2014-07-08 00:15:35 2206029     3.0.2 x86_64 linux-gnu     hflights     0.1      US     7
+.. ..        ...      ...     ...       ...    ...       ...          ...     ...     ...   ...
+
+> summarize(by_package, mean(size))
+Source: local data frame [6,023 x 2]
+
+       package mean(size)
+1           A3   62194.96
+2  ABCExtremes   22904.33
+3     ABCoptim   17807.25
+4        ABCp2   30473.33
+5       ACCLMA   33375.53
+6          ACD   99055.29
+7         ACNE   96099.75
+8        ACTCD  134746.27
+9    ADGofTest   12262.91
+10        ADM3 1077203.47
+..         ...        ...
+
+
+> pack_sum <- summarize(by_package,
+                      count = n(),
+                      unique = n_distinct(ip_id),
+                      countries = n_distinct(country),
+                      avg_bytes = mean(size))
+
+> pack_sum
+Source: local data frame [6,023 x 5]
+
+       package count unique countries  avg_bytes
+1           A3    25     24        10   62194.96
+2  ABCExtremes    18     17         9   22904.33
+3     ABCoptim    16     15         9   17807.25
+4        ABCp2    18     17        10   30473.33
+5       ACCLMA    15     14         9   33375.53
+6          ACD    17     16        10   99055.29
+7         ACNE    16     15        10   96099.75
+8        ACTCD    15     14         9  134746.27
+9    ADGofTest    47     44        20   12262.91
+10        ADM3    17     16        10 1077203.47
+..         ...   ...    ...       ...        ...
+
+> quantile(pack_sum$count, probs = 0.99)		# gives the number that splits the data into the top and bottom 99%
+> top_counts <- filter(pack_sum, count > 679)
+> View(top_counts)					# lets you view a full table; NICE!!!
+
+Chaining
+=========
+----------------------------------------------
+result3 <-
+  cran %>%
+  group_by(package) %>%
+  summarize(count = n(),
+            unique = n_distinct(ip_id),
+            countries = n_distinct(country),
+            avg_bytes = mean(size)
+  ) %>%
+  filter(countries > 60) %>%
+  arrange(desc(countries), avg_bytes)
+
+# Print result to console
+print(result3)
+----------------------------------------------
+----------------------------------------------
+cran %>%
+  select(ip_id, country, package, size) %>%
+  mutate(size_mb = size / 2^20) %>%
+  filter(size_mb <= 0.5) %>%
+  arrange(desc(size_mb))
+---------------------------------------------- 

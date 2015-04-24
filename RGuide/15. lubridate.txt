@@ -1,0 +1,94 @@
+==================
+Getting started
+==================
+library(lubridate)
+
+> this_moment <- now()
+> this_moment
+[1] "2015-03-10 13:03:10 SAST"
+
+> second(this_moment)    year(), month(), day(), hour(), minute(), and second()
+[1] 10.37619
+
+
+
+ymd(), dmy(), hms(), ymd_hms()
+--------------------------------
+> my_date <- ymd("1989-05-17")
+
+> my_date
+[1] "1989-05-17 UTC"
+
+> ymd("1989 May 17")
+[1] "1989-05-17 UTC"
+
+> mdy("March 12, 1975")
+[1] "1975-03-12 UTC"
+
+> dmy(25081985)
+[1] "1985-08-25 UTC"
+
+> ymd("192012")
+[1] NA
+
+
+> dt1
+[1] "2014-08-23 17:23:02"
+> ymd_hms(dt1)
+[1] "2014-08-23 17:23:02 UTC"
+
+
+> hms("03:22:14")
+[1] "3H 22M 14S"
+
+
+> dt2
+[1] "2014-05-14" "2014-09-22" "2014-07-11"
+> ymd(dt2)
+[1] "2014-05-14 UTC" "2014-09-22 UTC" "2014-07-11 UTC"
+
+
+update
+---------
+> update(this_moment, hours = 8, minutes = 34, seconds = 55)
+[1] "2015-03-10 08:34:55 SAST"
+
+
+example1
+----------
+> nyc <- now("America/New_York")
+> nyc
+[1] "2015-03-10 07:31:02 EDT"
+
+> depart <- nyc + days(2)
+> depart
+[1] "2015-03-12 07:31:02 EDT"
+
+> arrive <- depart + hours(15) + minutes(50)
+
+> arrive <- with_tz(arrive, "Asia/Hong_Kong") Change the timezone
+
+example2
+---------
+> last_time <- mdy("June 17, 2008", tz = "Singapore")
+> how_long <- new_interval(last_time, arrive)
+
+> as.period(how_long)
+[1] "6y 8m 24d 21H 24M 2.9903450012207S"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

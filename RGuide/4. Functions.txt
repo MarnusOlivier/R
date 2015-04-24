@@ -1,0 +1,68 @@
+f <- function(<arguments>) {
+ ## Do something interesting
+}
+
+The return value of a function is the last expression in the function body to be evaluated.
+The formals function returns a list of all the formal arguments of a function
+
+> mydata <- rnorm(100)
+> sd(mydata)
+> sd(x = mydata)
+> sd(x = mydata, na.rm = FALSE)
+> sd(na.rm = FALSE, x = mydata)
+> sd(na.rm = FALSE, mydata)
+
+f <- function(a, b = 1, c = 2, d = NULL) {
+}
+In addition to not specifying a default value, you can also set an argument value to NULL
+
+================================
+Lazy Evaluation Lazy Evaluation
+================================
+f <- function(a, b) {
+ a^2
+}
+f(2)
+[1] 4
+
+f <- function(a, b) {
+ print(a)
+ print(b)
+}
+f(45)
+## [1] 45
+## Error: argument "b" is missing, with no default
+
+======================================
+The “...” Argument The “...” Argument
+======================================
+The ... argument indicate a variable number of arguments that are usually passed on to other
+functions
+
+... is often used when extending another function and you don’t want to copy the entire argument
+list of the original function
+
+myplot <- function(x, y, type = "l", ...) {
+ plot(x, y, type = type, ...)
+}
+
+> mean
+function (x, ...)
+UseMethod("mean")
+
+The ... argument is also necessary when the number of arguments passed to the function cannot be
+known in advance.
+> args(paste)
+function (..., sep = " ", collapse = NULL)
+> args(cat)
+function (..., file = "", sep = " ", fill = FALSE,
+ labels = NULL, append = FALSE)
+
+One catch with ... is that any arguments that appear after ... on the argument list must be named
+explicitly and cannot be partially matched.
+> args(paste)
+function (..., sep = " ", collapse = NULL)
+> paste("a", "b", sep = ":")
+[1] "a:b"
+> paste("a", "b", se = ":")
+[1] "a b :"
